@@ -14,6 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final globalStateHandler = Provider.of<GlobalStateHandler>(context);
+
     final bodyWidgests = [BodyPage(), EventAndNewsPage(), UserLoginPage()];
     return Scaffold(
       appBar: AppBar(

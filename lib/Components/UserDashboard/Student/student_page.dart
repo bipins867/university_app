@@ -1,20 +1,45 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
 import 'package:university_app/Components/UserDashboard/FacultyList/faculty_list_page.dart';
 import 'package:university_app/Components/UserDashboard/PreviousYearQuestions/previous_year_questions_page.dart';
+import 'package:university_app/Components/UserDashboard/Student/controller_student.dart';
 import 'package:university_app/Components/UserDashboard/StudyMaterial/study_material_page.dart';
 import 'package:university_app/Components/UserDashboard/UserProfile/user_profile_page.dart';
+import 'package:university_app/Components/global_ui_helper.dart';
 
-class StudentDashboard extends StatelessWidget {
+class StudentDashboard extends StatefulWidget {
   const StudentDashboard({super.key});
+
+  @override
+  State<StudentDashboard> createState() => _StudentDashboardState();
+}
+
+class _StudentDashboardState extends State<StudentDashboard> {
+  Map userInfo = {"name": ""};
+
+  @override
+  void initState() {
+    getUserProfileInfo().then(
+      (value) {
+        setState(() {
+          userInfo = value['userInfo'];
+        });
+      },
+    ).onError((error, stackTrace) {
+      GlobalUi.createErrorAlertBox(context, 'Error', error.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(20.0),
       children: [
-        const ListTile(
-          title: Text('Welcome, John Doe'),
+        ListTile(
+          title: Text("Welcome, ${userInfo['name']}"),
         ),
         const SizedBox(height: 20.0),
         _buildDashboardItem(
@@ -23,7 +48,9 @@ class StudentDashboard extends StatelessWidget {
           Icons.person,
           () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => UserProfilePage(),
+              builder: (context) => UserProfilePage(
+                userInfo: userInfo,
+              ),
             ));
           },
         ),

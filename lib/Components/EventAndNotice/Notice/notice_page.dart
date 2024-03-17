@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
 
 class NoticePage extends StatelessWidget {
-  const NoticePage({super.key});
+  final List noticeList;
+  const NoticePage({super.key, required this.noticeList});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: notices.length,
+      itemCount: noticeList.length,
       itemBuilder: (BuildContext context, int index) {
-        return buildNoticeCard(notices[index]);
+        return buildNoticeCard(noticeList[index]);
       },
     );
   }
 
-  Widget buildNoticeCard(Notice notice) {
+  Widget buildNoticeCard(Map notice) {
     return Card(
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       elevation: 4.0,
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              notice.title,
-              style: TextStyle(
+              notice['title'],
+              style: const TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(
-              notice.description,
-              style: TextStyle(fontSize: 16.0),
+              notice['subTitle'],
+              style: const TextStyle(fontSize: 16.0),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
                   // Handle button press if needed
                 },
-                child: Text('View More'),
+                child: const Text('View More'),
               ),
             ),
           ],
@@ -50,30 +51,3 @@ class NoticePage extends StatelessWidget {
     );
   }
 }
-
-class Notice {
-  final String title;
-  final String description;
-
-  Notice({required this.title, required this.description});
-}
-
-// Sample list of notices
-List<Notice> notices = [
-  Notice(
-    title: 'Notice 1',
-    description: 'Description of Notice 1...',
-  ),
-  Notice(
-    title: 'Notice 2',
-    description: 'Description of Notice 2...',
-  ),
-  Notice(
-    title: 'Notice 3',
-    description: 'Description of Notice 3...',
-  ),
-  Notice(
-    title: 'Notice 4',
-    description: 'Description of Notice 4...',
-  ),
-];

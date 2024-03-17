@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:university_app/Components/Home/Body/CrouselImages/body_image_slider.dart';
 import 'package:university_app/Components/Home/Body/HeaderImages/header_images_page.dart';
 import 'package:university_app/Components/Home/Body/LeaderList/leader_list_page.dart';
-import 'package:university_app/Components/Home/Body/Welcome/welcome_page.dart';
 
 class BodyPage extends StatelessWidget {
   const BodyPage({super.key});
@@ -15,7 +14,7 @@ class BodyPage extends StatelessWidget {
           HeaderImagesPage(),
           BodyImageSlider(),
           LeaderList(),
-          WelcomePage()
+          //WelcomePage()
         ],
       ),
     );

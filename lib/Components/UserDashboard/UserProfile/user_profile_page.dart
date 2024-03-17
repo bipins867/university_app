@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UserProfilePage extends StatelessWidget {
+  final Map userInfo;
+
+  const UserProfilePage({super.key, required this.userInfo});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,12 +30,13 @@ class UserProfilePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.0),
-            buildDetailRow('Name', 'John Doe'),
-            buildDetailRow('Father\'s Name', 'Michael Doe'),
-            buildDetailRow('User ID', '123456'),
-            buildDetailRow('Department', 'Computer Science'),
-            buildDetailRow('Contact', '+1234567890'),
-            buildDetailRow('Address', '123 Main St, City, Country'),
+            buildDetailRow('Name', userInfo['name']),
+            buildDetailRow('Father\'s Name', userInfo['fathersName']),
+            buildDetailRow('College ID', userInfo['collegeId'].toString()),
+            buildDetailRow('Department', userInfo['department']),
+            buildDetailRow('Contact', userInfo['phone']),
+            buildDetailRow('Email', userInfo['email']),
+            buildDetailRow('Address', userInfo['address']),
           ],
         ),
       ),

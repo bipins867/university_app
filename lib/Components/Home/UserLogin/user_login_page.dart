@@ -1,5 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:university_app/Components/Home/UserLogin/controller_user_login.dart';
 import 'package:university_app/Components/Home/UserLogin/ui_helper_user_login.dart';
+import 'package:university_app/Store/global_state_management.dart';
 
 class UserLoginPage extends StatefulWidget {
   const UserLoginPage({super.key});
@@ -14,10 +20,31 @@ class _UserLoginPageState extends State<UserLoginPage> {
   TextEditingController userIdController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final listUserType = ['student', 'faculty', 'alumni'];
   int userType = 0;
+  SharedPreferences? _sharedPreferences;
+
+  isNullFields(collegeId, password) {
+    if (collegeId == '' || password == '') {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    SharedPreferences.getInstance().then(
+      (value) {
+        _sharedPreferences = value;
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final globalStateHandler = Provider.of<GlobalStateHandler>(context);
+
     return Container(
       padding: const EdgeInsets.all(40),
       margin: const EdgeInsets.all(10),
@@ -73,7 +100,31 @@ class _UserLoginPageState extends State<UserLoginPage> {
             const SizedBox(
               height: 20,
             ),
-            UiUsersLogin.input_button(() {}, "Login")
+            UiUsersLogin.input_button(() {
+              if (isNullFields(
+                  userIdController.text, passwordController.text)) {
+                showDialog(
+                  context: context,
+                  builder: (context) => const AlertDialog(
+                    title: Text("Please Provide values to the fields!"),
+                  ),
+                );
+              } else {
+                userLogin(userIdController.text, passwordController.text,
+                        listUserType[userType])
+                    .then((data) {
+                  _sharedPreferences?.setString('token', data["token"]);
+
+                  globalStateHandler.setIsLoggedIn(true);
+                  globalStateHandler.setSelectedHomePage(0);
+                }).onError(
+                  (error, stackTrace) {
+                    UiUsersLogin.createErrorAlertBox(
+                        context, "Error!", error.toString());
+                  },
+                );
+              }
+            }, "Login")
           ],
         ),
       ),

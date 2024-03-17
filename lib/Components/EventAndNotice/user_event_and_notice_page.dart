@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/EventAndNotice/Events/event_page.dart';
 import 'package:university_app/Components/EventAndNotice/Notice/notice_page.dart';
+import 'package:university_app/Components/EventAndNotice/controller_event_and_notice.dart';
 
 class EventAndNewsPage extends StatefulWidget {
   const EventAndNewsPage({super.key});
@@ -12,6 +15,21 @@ class EventAndNewsPage extends StatefulWidget {
 class _EventAndNewsPageState extends State<EventAndNewsPage>
     with TickerProviderStateMixin {
   TextStyle textStyle = const TextStyle(fontWeight: FontWeight.bold);
+
+  List eventList = [];
+  List noticeList = [];
+
+  @override
+  void initState() {
+    getEventAndNotice(1111).then((data) {
+      setState(() {
+        eventList = data['events'];
+        noticeList = data['notice'];
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
@@ -43,7 +61,14 @@ class _EventAndNewsPageState extends State<EventAndNewsPage>
           Expanded(
             child: TabBarView(
               controller: tabController,
-              children: const [EventPage(), NoticePage()],
+              children: [
+                EventPage(
+                  eventList: eventList,
+                ),
+                NoticePage(
+                  noticeList: noticeList,
+                )
+              ],
             ),
           )
         ],
