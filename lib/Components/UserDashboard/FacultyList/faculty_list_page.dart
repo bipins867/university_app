@@ -1,31 +1,30 @@
-import 'package:flutter/material.dart';
-import 'package:university_app/Components/UserDashboard/FacultyList/faculty_profile_page.dart';
+import 'dart:developer';
 
-class FacultyListPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:university_app/Components/UserDashboard/FacultyList/controller_faculty_list.dart';
+import 'package:university_app/Components/UserDashboard/Users/Faculty/faculty_profile_page.dart';
+
+class FacultyListPage extends StatefulWidget {
   const FacultyListPage({super.key});
 
-  final List<Map<String, String>> facultyList = const [
-    {
-      'name': 'Dr. John Doe',
-      'designation': 'Professor',
-      'area_of_specialization': 'Computer Science'
-    },
-    {
-      'name': 'Prof. Jane Smith',
-      'designation': 'Associate Professor',
-      'area_of_specialization': 'Electrical Engineering'
-    },
-    {
-      'name': 'Dr. Mike Johnson',
-      'designation': 'Assistant Professor',
-      'area_of_specialization': 'Mechanical Engineering'
-    },
-    {
-      'name': 'Prof. Emily Brown',
-      'designation': 'Professor',
-      'area_of_specialization': 'Civil Engineering'
-    },
-  ];
+  @override
+  State<FacultyListPage> createState() => _FacultyListPageState();
+}
+
+class _FacultyListPageState extends State<FacultyListPage> {
+  List facultyList = [];
+
+  @override
+  void initState() {
+    getFacultyList().then(
+      (faculties) {
+        setState(() {
+          facultyList = faculties['faculties'];
+        });
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,27 +38,30 @@ class FacultyListPage extends StatelessWidget {
           final faculty = facultyList[index];
           return InkWell(
             onTap: () {
+              faculty['collegeId'] = faculty['User']['collegeId'];
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => FacultyProfilePage(),
+                  builder: (context) => FacultyProfilePage(
+                    userInfo: faculty,
+                  ),
                 ),
               );
             },
             child: Card(
               elevation: 4,
-              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       faculty['name'] ?? '',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(faculty['designation'] ?? ''),
-                    Text(faculty['area_of_specialization'] ?? ''),
+                    Text(faculty['areaOfSpecialization'] ?? ''),
                   ],
                 ),
               ),

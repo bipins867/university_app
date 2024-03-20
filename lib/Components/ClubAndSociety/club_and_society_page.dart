@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/ClubAndSociety/ClubInfo/club_info_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 
-class ClubSocietyPage extends StatelessWidget {
+class ClubSocietyPage extends StatefulWidget {
   const ClubSocietyPage({super.key});
+
+  @override
+  State<ClubSocietyPage> createState() => _ClubSocietyPageState();
+}
+
+class _ClubSocietyPageState extends State<ClubSocietyPage> {
+  List clubAndSocietes = [];
+  @override
+  void initState() {
+    GlobalController.getRequest('clubAndSociety/get/clubAndSocietes')
+        .then((data) {
+      setState(() {
+        clubAndSocietes = data['clubAndSocietes'];
+      });
+      //log(data.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,40 +30,21 @@ class ClubSocietyPage extends StatelessWidget {
         title: const Text('Clubs & Societies'),
       ),
       // drawer: const HomeDrawer(),
-      body: ListView(
-        children: [
-          _buildClubSocietyItem(
-            context,
-            'Music Club',
-            'Where words fail, music speaks.',
-          ),
-          _buildClubSocietyItem(
-            context,
-            'Art Society',
-            'Every artist was first an amateur.',
-          ),
-          _buildClubSocietyItem(
-            context,
-            'Literary Club',
-            'The pen is mightier than the sword.',
-          ),
-          _buildClubSocietyItem(
-            context,
-            'Dance Club',
-            'Dance like nobody\'s watching.',
-          ),
-          _buildClubSocietyItem(
-            context,
-            'Coding Club',
-            'In code we trust.',
-          ),
-        ],
+
+      body: ListView.builder(
+        itemCount: clubAndSocietes.length,
+        itemBuilder: (context, index) {
+          Map clubAndSociety = clubAndSocietes[index];
+
+          return _buildClubSocietyItem(context, clubAndSociety['title'],
+              clubAndSociety['subTitle'], clubAndSociety);
+        },
       ),
     );
   }
 
   Widget _buildClubSocietyItem(
-      BuildContext context, String title, String subtitle) {
+      BuildContext context, String title, String subtitle, Map clubInfo) {
     return Card(
       elevation: 2.0,
       child: ListTile(
@@ -53,7 +53,9 @@ class ClubSocietyPage extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const ClubInfoPage(),
+              builder: (context) => ClubInfoPage(
+                clubInfo: clubInfo,
+              ),
             ),
           );
         },

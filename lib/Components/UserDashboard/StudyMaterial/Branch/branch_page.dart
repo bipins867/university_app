@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/UserDashboard/StudyMaterial/Branch/Semester/semester_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 
-class BranchPage extends StatelessWidget {
-  const BranchPage({super.key});
-  final List<Map<String, String>> branches = const [
-    {'title': 'CSE', 'description': 'Computer Science and Engineering'},
-    {'title': 'IT', 'description': 'Information Technology'},
-    {
-      'title': 'ECE',
-      'description': 'Electronics and Communication Engineering'
-    },
-    {'title': 'EE', 'description': 'Electrical Engineering'},
-    {'title': 'ME', 'description': 'Mechanical Engineering'},
-    {'title': 'CE', 'description': 'Civil Engineering'},
-    {'title': 'CHE', 'description': 'Chemical Engineering'},
-  ];
+class BranchPage extends StatefulWidget {
+  final int courseId;
+  const BranchPage({super.key, required this.courseId});
+
+  @override
+  State<BranchPage> createState() => _BranchPageState();
+}
+
+class _BranchPageState extends State<BranchPage> {
+  List branches = [];
+  @override
+  void initState() {
+    GlobalController.postRequest(
+            'studyMaterials/get/Branch', {'courseId': widget.courseId})
+        .then((data) {
+      setState(() {
+        branches = data['branches'];
+      });
+      //log(data.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +36,13 @@ class BranchPage extends StatelessWidget {
         (branch) {
           return CourseCard(
             course: branch['title']!,
-            description: branch['description']!,
+            description: branch['subTitle']!,
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const SemesterPage(),
+                  builder: (context) => SemesterPage(
+                    branchId: branch['id'],
+                  ),
                 ),
               );
             },

@@ -1,42 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/UserDashboard/StudyMaterial/Branch/Semester/Subject/subject_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 
-class SemesterPage extends StatelessWidget {
-  const SemesterPage({super.key});
-  final List<Map<String, String>> semesters = const [
-    {
-      'title': 'Semester I',
-      'description': 'First semester of the academic year'
-    },
-    {
-      'title': 'Semester II',
-      'description': 'Second semester of the academic year'
-    },
-    {
-      'title': 'Semester III',
-      'description': 'Third semester of the academic year'
-    },
-    {
-      'title': 'Semester IV',
-      'description': 'Fourth semester of the academic year'
-    },
-    {
-      'title': 'Semester V',
-      'description': 'Fifth semester of the academic year'
-    },
-    {
-      'title': 'Semester VI',
-      'description': 'Sixth semester of the academic year'
-    },
-    {
-      'title': 'Semester VII',
-      'description': 'Seventh semester of the academic year'
-    },
-    {
-      'title': 'Semester VIII',
-      'description': 'Eighth semester of the academic year'
-    },
-  ];
+class SemesterPage extends StatefulWidget {
+  final int branchId;
+  const SemesterPage({super.key, required this.branchId});
+
+  @override
+  State<SemesterPage> createState() => _SemesterPageState();
+}
+
+class _SemesterPageState extends State<SemesterPage> {
+  List semesters = [];
+  @override
+  void initState() {
+    GlobalController.postRequest(
+            'studyMaterials/get/Semester', {'branchId': widget.branchId})
+        .then((data) {
+      setState(() {
+        semesters = data['semesters'];
+      });
+      //log(data.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +36,13 @@ class SemesterPage extends StatelessWidget {
         (semester) {
           return CourseCard(
             course: semester['title']!,
-            description: semester['description']!,
+            description: semester['subTitle']!,
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => SubjectPage(),
+                  builder: (context) => SubjectPage(
+                    semesterId: semester['id'],
+                  ),
                 ),
               );
             },

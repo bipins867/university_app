@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:university_app/Components/Alumini/alumini_section_page.dart';
+import 'package:university_app/Components/alumni/alumni_section_page.dart';
 import 'package:university_app/Components/ClubAndSociety/club_and_society_page.dart';
 import 'package:university_app/Components/UserDashboard/dashboard_page.dart';
 import 'package:university_app/Store/global_state_management.dart';
@@ -62,7 +62,7 @@ class HomeDrawer extends StatelessWidget {
                 ),
               );
             },
-            child: const Text('Alumini'),
+            child: const Text('alumni'),
           ),
         ],
       ),

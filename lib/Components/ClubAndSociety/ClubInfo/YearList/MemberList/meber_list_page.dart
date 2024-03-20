@@ -1,48 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:university_app/Components/UserDashboard/Users/Student/student_profile_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 
-class MemberListPage extends StatelessWidget {
-  final List<Map<String, dynamic>> members = const [
-    {'name': 'Admin', 'department': 'Computer Science', 'isAdmin': true},
-    {'name': 'John Doe', 'department': 'Computer Science', 'isAdmin': false},
-    {
-      'name': 'Jane Smith',
-      'department': 'Electrical Engineering',
-      'isAdmin': false
-    },
-    {
-      'name': 'Alice Johnson',
-      'department': 'Mechanical Engineering',
-      'isAdmin': false
-    },
-    {'name': 'Bob Brown', 'department': 'Civil Engineering', 'isAdmin': false},
-    {
-      'name': 'Chris Lee',
-      'department': 'Information Technology',
-      'isAdmin': false
-    },
-    {
-      'name': 'Emily Taylor',
-      'department': 'Chemical Engineering',
-      'isAdmin': false
-    },
-    {
-      'name': 'David Wilson',
-      'department': 'Computer Science',
-      'isAdmin': false
-    },
-    {
-      'name': 'Eva Martinez',
-      'department': 'Electrical Engineering',
-      'isAdmin': false
-    },
-    {
-      'name': 'Grace Anderson',
-      'department': 'Computer Science',
-      'isAdmin': false
-    },
-  ];
+class MemberListPage extends StatefulWidget {
+  final int yearId;
+  const MemberListPage({super.key, required this.yearId});
 
-  const MemberListPage({Key? key}) : super(key: key);
+  @override
+  State<MemberListPage> createState() => _MemberListPageState();
+}
+
+class _MemberListPageState extends State<MemberListPage> {
+  List members = [];
+  @override
+  void initState() {
+    GlobalController.postRequest(
+        'clubAndSociety/get/members', {"yearId": widget.yearId}).then((data) {
+      setState(() {
+        members = data['members'];
+      });
+      //log(data.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,16 +43,24 @@ class MemberListPage extends StatelessWidget {
   }
 
   Widget _buildMemberCard(BuildContext context, member) {
+    Map studentInfo = member['studentInof'];
+    Map userProfile = studentInfo['userProfile'];
+
     return Card(
       margin: const EdgeInsets.all(8),
       child: ListTile(
-        title: Text(member['name']),
-        subtitle: Text(member['department']),
-        trailing:
-            member['isAdmin'] ? const Icon(Icons.admin_panel_settings) : null,
+        title: Text(userProfile['name']),
+        subtitle: Text(studentInfo['designation']),
+        trailing: studentInfo['isAdmin']
+            ? const Icon(Icons.admin_panel_settings)
+            : null,
         onTap: () {
-          // Handle member selection
-          // You can navigate to another page or perform any other action here
+          userProfile['collegeId'] = studentInfo['collegeId'];
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => StudentProfilePage(userInfo: userProfile),
+            ),
+          );
         },
       ),
     );

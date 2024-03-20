@@ -1,12 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/EventAndNotice/Events/event_page.dart';
 import 'package:university_app/Components/EventAndNotice/Notice/notice_page.dart';
 import 'package:university_app/Components/EventAndNotice/controller_event_and_notice.dart';
 
 class EventAndNewsPage extends StatefulWidget {
-  const EventAndNewsPage({super.key});
+  final int forWhom;
+  const EventAndNewsPage({super.key, required this.forWhom});
 
   @override
   State<EventAndNewsPage> createState() => _EventAndNewsPageState();
@@ -21,7 +20,7 @@ class _EventAndNewsPageState extends State<EventAndNewsPage>
 
   @override
   void initState() {
-    getEventAndNotice(1111).then((data) {
+    getEventAndNotice(widget.forWhom).then((data) {
       setState(() {
         eventList = data['events'];
         noticeList = data['notice'];

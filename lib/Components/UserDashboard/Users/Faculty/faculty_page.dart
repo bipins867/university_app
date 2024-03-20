@@ -1,22 +1,19 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
-import 'package:university_app/Components/UserDashboard/FacultyList/faculty_list_page.dart';
-import 'package:university_app/Components/UserDashboard/PreviousYearQuestions/previous_year_questions_page.dart';
-import 'package:university_app/Components/UserDashboard/Student/controller_student.dart';
-import 'package:university_app/Components/UserDashboard/StudyMaterial/study_material_page.dart';
-import 'package:university_app/Components/UserDashboard/UserProfile/user_profile_page.dart';
+import 'package:university_app/Components/Department/department_page.dart';
+import 'package:university_app/Components/UserDashboard/Users/Faculty/faculty_profile_page.dart';
+
+import 'package:university_app/Components/UserDashboard/Users/controller_user.dart';
 import 'package:university_app/Components/global_ui_helper.dart';
 
-class StudentDashboard extends StatefulWidget {
-  const StudentDashboard({super.key});
+class FacultyDashboard extends StatefulWidget {
+  const FacultyDashboard({super.key});
 
   @override
-  State<StudentDashboard> createState() => _StudentDashboardState();
+  State<FacultyDashboard> createState() => _FacultyDashboardState();
 }
 
-class _StudentDashboardState extends State<StudentDashboard> {
+class _FacultyDashboardState extends State<FacultyDashboard> {
   Map userInfo = {"name": ""};
 
   @override
@@ -39,7 +36,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
       padding: const EdgeInsets.all(20.0),
       children: [
         ListTile(
-          title: Text("Welcome, ${userInfo['name']}"),
+          title: Text("Welcome, Dr. ${userInfo['name']}"),
         ),
         const SizedBox(height: 20.0),
         _buildDashboardItem(
@@ -48,7 +45,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Icons.person,
           () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => UserProfilePage(
+              builder: (context) => FacultyProfilePage(
                 userInfo: userInfo,
               ),
             ));
@@ -56,50 +53,36 @@ class _StudentDashboardState extends State<StudentDashboard> {
         ),
         _buildDashboardItem(
           context,
-          'Event & Notice Section',
-          Icons.event,
+          'Events and Notifications',
+          Icons.notifications,
           () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const EventAndNewsPage(),
+                builder: (context) => const EventAndNewsPage(
+                  forWhom: 2222,
+                ),
               ),
             );
           },
         ),
         _buildDashboardItem(
           context,
-          'Study Materials',
-          Icons.book,
+          'Department',
+          Icons.apartment,
           () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const StudyMaterialPage(),
+                builder: (context) => const DepartmentListPage(),
               ),
             );
           },
         ),
         _buildDashboardItem(
           context,
-          'Previous Year Questions',
-          Icons.question_answer,
+          'Student Attendance',
+          Icons.accessibility,
           () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const PreviousYearQuestionPage(),
-              ),
-            );
-          },
-        ),
-        _buildDashboardItem(
-          context,
-          'Faculty List',
-          Icons.people,
-          () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const FacultyListPage(),
-              ),
-            );
+            // Navigate to student attendance screen
           },
         ),
       ],

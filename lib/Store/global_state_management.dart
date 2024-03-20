@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class GlobalStateHandler extends ChangeNotifier {
   int selectHomePage = 0;
   bool isLoggedIn = false;
-  String userName = '';
+  String userType = 'student';
 
   setSelectedHomePage(int currentHome) {
     selectHomePage = currentHome;

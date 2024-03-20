@@ -1,45 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/UserDashboard/StudyMaterial/Branch/Semester/Subject/PdfData/pdf_data_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 
-class SubjectPage extends StatelessWidget {
-  const SubjectPage({super.key});
-  final List<Map<String, String>> subjects = const [
-    {
-      'title': 'Mathematics',
-      'description': 'Fundamental mathematics concepts and applications'
-    },
-    {
-      'title': 'Computer Science',
-      'description':
-          'Introduction to computer science principles and programming'
-    },
-    {
-      'title': 'Physics',
-      'description':
-          'Study of natural phenomena and laws governing the universe'
-    },
-    {
-      'title': 'Chemistry',
-      'description':
-          'Study of the composition, structure, and properties of matter'
-    },
-    {
-      'title': 'English',
-      'description': 'Language skills development and literature analysis'
-    },
-    {
-      'title': 'Mechanical Engineering',
-      'description': 'Principles of mechanical systems and design'
-    },
-    {
-      'title': 'Electrical Engineering',
-      'description': 'Study of electrical circuits and systems'
-    },
-    {
-      'title': 'Civil Engineering',
-      'description': 'Design and construction of infrastructure and buildings'
-    },
-  ];
+class SubjectPage extends StatefulWidget {
+  final int semesterId;
+  const SubjectPage({super.key, required this.semesterId});
+
+  @override
+  State<SubjectPage> createState() => _SubjectPageState();
+}
+
+class _SubjectPageState extends State<SubjectPage> {
+  List subjects = [];
+  @override
+  void initState() {
+    GlobalController.postRequest(
+            'studyMaterials/get/Subject', {'semesterId': widget.semesterId})
+        .then((data) {
+      setState(() {
+        subjects = data['subjects'];
+      });
+      //log(data.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +36,13 @@ class SubjectPage extends StatelessWidget {
         (subject) {
           return CourseCard(
             course: subject['title']!,
-            description: subject['description']!,
+            description: subject['subTitle']!,
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const PdfListPage(),
+                  builder: (context) => PdfPage(
+                    subjectId: subject['id'],
+                  ),
                 ),
               );
             },
@@ -73,6 +59,7 @@ class CourseCard extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CourseCard({
+    super.key,
     required this.course,
     required this.description,
     required this.onPressed,
@@ -81,7 +68,7 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       elevation: 4.0,
       child: ListTile(
         title: Text(course),

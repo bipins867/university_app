@@ -1,71 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:university_app/Components/UserDashboard/StudyMaterial/Branch/Semester/Subject/PdfData/pdf_list_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 
-class PdfListPage extends StatelessWidget {
-  const PdfListPage({Key? key}) : super(key: key);
+class PdfPage extends StatefulWidget {
+  final int subjectId;
 
-  final List<Map<String, String>> pdfList = const [
-    {
-      'name': 'Introduction to Flutter',
-      'description': 'A beginner\'s guide to Flutter development'
-    },
-    {
-      'name': 'Advanced Data Structures',
-      'description': 'In-depth exploration of advanced data structures'
-    },
-    {
-      'name': 'Machine Learning Basics',
-      'description': 'Fundamentals of machine learning algorithms and concepts'
-    },
-    {
-      'name': 'Networking Essentials',
-      'description': 'Understanding networking protocols and architectures'
-    },
-    {
-      'name': 'Web Development with React',
-      'description': 'Building web applications using the React framework'
-    },
-    {
-      'name': 'Database Design Principles',
-      'description': 'Best practices for designing efficient databases'
-    },
-    {
-      'name': 'Operating System Concepts',
-      'description': 'Key principles and components of operating systems'
-    },
-    {
-      'name': 'Artificial Intelligence Fundamentals',
-      'description': 'Overview of AI algorithms and applications'
-    },
-  ];
+  const PdfPage({super.key, required this.subjectId});
+
+  @override
+  State<PdfPage> createState() => _PdfPageState();
+}
+
+class _PdfPageState extends State<PdfPage> with TickerProviderStateMixin {
+  TextStyle textStyle = const TextStyle(fontWeight: FontWeight.bold);
+
+  List questionPaperList = [];
+  List studyMaterialList = [];
+  @override
+  void initState() {
+    GlobalController.postRequest(
+        'studyMaterials/get/Pdf', {'subjectId': widget.subjectId}).then((data) {
+      setState(() {
+        questionPaperList = data['questionPaperPdf'];
+        studyMaterialList = data['studyMaterialPdf'];
+      });
+      //log(data.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    TabController tabController = TabController(length: 2, vsync: this);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PDF List'),
+        title: const Text("Study Materials"),
       ),
-      body: ListView.builder(
-        itemCount: pdfList.length,
-        itemBuilder: (context, index) {
-          final pdf = pdfList[index];
-          return Card(
-            margin: const EdgeInsets.all(8.0),
-            elevation: 4.0,
-            child: ListTile(
-              title: Text(
-                pdf['name'] ?? '',
-                style: TextStyle(fontWeight: FontWeight.bold),
+      body: Column(
+        children: [
+          TabBar(
+            tabAlignment: TabAlignment.fill,
+            tabs: [
+              Tab(
+                child: Text(
+                  "Study",
+                  style: textStyle,
+                ),
               ),
-              subtitle: Text(pdf['description'] ?? ''),
-              trailing: ElevatedButton(
-                onPressed: () {
-                  // Handle button press
-                },
-                child: Text('View/Download'),
+              Tab(
+                child: Text(
+                  "Question Paper",
+                  style: textStyle,
+                ),
               ),
+            ],
+            controller: tabController,
+            //isScrollable: true,
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: tabController,
+              children: [
+                PdfListPage(pdfList: questionPaperList),
+                PdfListPage(pdfList: studyMaterialList),
+              ],
             ),
-          );
-        },
+          )
+        ],
       ),
     );
   }

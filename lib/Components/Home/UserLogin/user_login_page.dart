@@ -53,7 +53,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             UiUsersLogin.inputFields(userIdController,
-                "Student/Faculity/Alumini Id", Icons.person, false),
+                "Student/Faculity/alumni Id", Icons.person, false),
             const SizedBox(
               height: 10,
             ),
@@ -85,7 +85,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
                       ),
                       DropdownMenuItem(
                         value: 2,
-                        child: Text("Alumini"),
+                        child: Text("alumni"),
                       ),
                     ],
                     onChanged: (value) {
@@ -114,7 +114,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
                         listUserType[userType])
                     .then((data) {
                   _sharedPreferences?.setString('token', data["token"]);
-
+                  globalStateHandler.userType = data['userType'];
                   globalStateHandler.setIsLoggedIn(true);
                   globalStateHandler.setSelectedHomePage(0);
                 }).onError(

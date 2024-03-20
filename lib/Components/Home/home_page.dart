@@ -15,7 +15,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final globalStateHandler = Provider.of<GlobalStateHandler>(context);
 
-    final bodyWidgests = [BodyPage(), EventAndNewsPage(), UserLoginPage()];
+    final bodyWidgests = [
+      const BodyPage(),
+      const EventAndNewsPage(
+        forWhom: 1111,
+      ),
+      const UserLoginPage()
+    ];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

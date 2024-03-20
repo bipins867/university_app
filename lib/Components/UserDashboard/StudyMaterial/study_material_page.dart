@@ -1,33 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/UserDashboard/StudyMaterial/Branch/branch_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 
-class StudyMaterialPage extends StatelessWidget {
+class StudyMaterialPage extends StatefulWidget {
   const StudyMaterialPage({super.key});
-  final List<Map<String, String>> courses = const [
-    {'title': 'BTech', 'description': 'Bachelor of Technology'},
-    {'title': 'MTech', 'description': 'Master of Technology'},
-    {'title': 'BBA', 'description': 'Bachelor of Business Administration'},
-    {'title': 'MBA', 'description': 'Master of Business Administration'},
-    {'title': 'MCA', 'description': 'Master of Computer Applications'},
-    {'title': 'MSC', 'description': 'Master of Science'},
-  ];
+
+  @override
+  State<StudyMaterialPage> createState() => _StudyMaterialPageState();
+}
+
+class _StudyMaterialPageState extends State<StudyMaterialPage> {
+  List courses = [];
+  @override
+  void initState() {
+    GlobalController.postRequest('studyMaterials/get/Course', {}).then((data) {
+      setState(() {
+        courses = data['courses'];
+      });
+      //log(data.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Course'),
+        title: const Text('Course'),
       ),
       body: ListView(
           children: courses.map(
         (course) {
           return CourseCard(
             course: course['title']!,
-            description: course['description']!,
+            description: course['subTitle']!,
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const BranchPage(),
+                  builder: (context) => BranchPage(
+                    courseId: course['id'],
+                  ),
                 ),
               );
             },
@@ -44,6 +56,7 @@ class CourseCard extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CourseCard({
+    super.key,
     required this.course,
     required this.description,
     required this.onPressed,
@@ -52,7 +65,7 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       elevation: 4.0,
       child: ListTile(
         title: Text(course),

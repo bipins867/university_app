@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:university_app/Components/ClubAndSociety/ClubInfo/ClubInfoHomePage/club_info_home_page.dart';
 import 'package:university_app/Components/ClubAndSociety/ClubInfo/YearList/year_list_page.dart';
 import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
 
 class ClubInfoPage extends StatelessWidget {
-  const ClubInfoPage({super.key});
+  final Map clubInfo;
+  const ClubInfoPage({super.key, required this.clubInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +23,12 @@ class ClubInfoPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Day Scholar\'s Club (DSC)',
+                    clubInfo['title'],
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'A club for students residing outside the campus',
+                    clubInfo['subTitle'],
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
@@ -48,12 +50,28 @@ class ClubInfoPage extends StatelessWidget {
                 children: [
                   _buildClubItem(
                     context,
+                    'About',
+                    Icons.info_outline,
+                    () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ClubInfoHomePage(
+                            clubInfo: clubInfo,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildClubItem(
+                    context,
                     'Members List',
                     Icons.people,
                     () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const YearListPage(),
+                          builder: (context) => YearListPage(
+                            clubAndSocietyId: clubInfo['id'],
+                          ),
                         ),
                       );
                     },
@@ -65,7 +83,9 @@ class ClubInfoPage extends StatelessWidget {
                     () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const EventAndNewsPage(),
+                          builder: (context) => const EventAndNewsPage(
+                            forWhom: 5555,
+                          ),
                         ),
                       );
                     },
