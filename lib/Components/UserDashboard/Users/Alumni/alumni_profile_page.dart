@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 class AlumniProfilePage extends StatelessWidget {
@@ -9,7 +7,6 @@ class AlumniProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log(userInfo.toString());
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Profile'),
@@ -49,7 +46,12 @@ class AlumniProfilePage extends StatelessWidget {
     );
   }
 
-  Widget buildDetailRow(String label, String value) {
+  Widget buildDetailRow(String label, dynamic value) {
+    if (value == null) {
+      return const SizedBox(
+        height: 0,
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -70,7 +72,7 @@ class AlumniProfilePage extends StatelessWidget {
           Expanded(
             flex: 5,
             child: Text(
-              value,
+              value.toString(),
               style: TextStyle(
                 fontSize: 16.0,
                 color: Colors.grey[600],

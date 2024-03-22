@@ -15,7 +15,7 @@ class _BranchPageState extends State<BranchPage> {
   @override
   void initState() {
     GlobalController.postRequest(
-            'studyMaterials/get/Branch', {'courseId': widget.courseId})
+            'studyMaterials/get/branches', {'courseId': widget.courseId})
         .then((data) {
       setState(() {
         branches = data['branches'];

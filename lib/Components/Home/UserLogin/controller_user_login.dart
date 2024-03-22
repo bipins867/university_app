@@ -8,7 +8,7 @@ Future userLogin(collegeId, password, userType) async {
   var remotePort = dotenv.env['remotePort'];
 
   try {
-    var uri = Uri.parse('http://$remoteIp:$remotePort/user/login');
+    var uri = Uri.parse('http://$remoteIp:$remotePort/auth/login');
 
     var response = await http.post(uri,
         headers: {'content-type': 'application/json'},

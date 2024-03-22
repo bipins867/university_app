@@ -19,7 +19,8 @@ class _PdfPageState extends State<PdfPage> with TickerProviderStateMixin {
   @override
   void initState() {
     GlobalController.postRequest(
-        'studyMaterials/get/Pdf', {'subjectId': widget.subjectId}).then((data) {
+            'studyMaterials/get/pdfs', {'subjectId': widget.subjectId})
+        .then((data) {
       setState(() {
         questionPaperList = data['questionPaperPdf'];
         studyMaterialList = data['studyMaterialPdf'];

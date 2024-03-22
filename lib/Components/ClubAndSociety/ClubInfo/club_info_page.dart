@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:university_app/Components/ClubAndSociety/ClubInfo/ClubInfoHomePage/MemberList/meber_list_page.dart';
 import 'package:university_app/Components/ClubAndSociety/ClubInfo/ClubInfoHomePage/club_info_home_page.dart';
-import 'package:university_app/Components/ClubAndSociety/ClubInfo/YearList/year_list_page.dart';
 import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
 
 class ClubInfoPage extends StatelessWidget {
@@ -69,7 +69,7 @@ class ClubInfoPage extends StatelessWidget {
                     () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => YearListPage(
+                          builder: (context) => MemberListPage(
                             clubAndSocietyId: clubInfo['id'],
                           ),
                         ),
@@ -83,8 +83,9 @@ class ClubInfoPage extends StatelessWidget {
                     () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const EventAndNewsPage(
-                            forWhom: 5555,
+                          builder: (context) => EventAndNewsPage(
+                            forWhom: 'clubAndSociety',
+                            requestObj: {'clubAndSocietyId': clubInfo['id']},
                           ),
                         ),
                       );

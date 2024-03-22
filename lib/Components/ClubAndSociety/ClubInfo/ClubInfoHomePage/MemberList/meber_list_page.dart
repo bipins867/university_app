@@ -5,8 +5,8 @@ import 'package:university_app/Components/UserDashboard/Users/Student/student_pr
 import 'package:university_app/Components/global_controller.dart';
 
 class MemberListPage extends StatefulWidget {
-  final int yearId;
-  const MemberListPage({super.key, required this.yearId});
+  final int clubAndSocietyId;
+  const MemberListPage({super.key, required this.clubAndSocietyId});
 
   @override
   State<MemberListPage> createState() => _MemberListPageState();
@@ -16,12 +16,11 @@ class _MemberListPageState extends State<MemberListPage> {
   List members = [];
   @override
   void initState() {
-    GlobalController.postRequest(
-        'clubAndSociety/get/members', {"yearId": widget.yearId}).then((data) {
+    GlobalController.postRequest('clubAndSociety/get/members',
+        {"clubAndSocietyId": widget.clubAndSocietyId}).then((data) {
       setState(() {
         members = data['members'];
       });
-      //log(data.toString());
     });
     super.initState();
   }
@@ -43,22 +42,20 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   Widget _buildMemberCard(BuildContext context, member) {
-    Map studentInfo = member['studentInof'];
-    Map userProfile = studentInfo['userProfile'];
+    Map ClubAndSocietyMember = member['ClubAndSocietyMember'];
 
     return Card(
       margin: const EdgeInsets.all(8),
       child: ListTile(
-        title: Text(userProfile['name']),
-        subtitle: Text(studentInfo['designation']),
-        trailing: studentInfo['isAdmin']
+        title: Text(member['name']),
+        subtitle: Text(ClubAndSocietyMember['designation']),
+        trailing: ClubAndSocietyMember['isAdmin']
             ? const Icon(Icons.admin_panel_settings)
             : null,
         onTap: () {
-          userProfile['collegeId'] = studentInfo['collegeId'];
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => StudentProfilePage(userInfo: userProfile),
+              builder: (context) => StudentProfilePage(userInfo: member),
             ),
           );
         },

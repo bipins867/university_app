@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:university_app/Components/UserDashboard/FacultyList/controller_faculty_list.dart';
+
 import 'package:university_app/Components/UserDashboard/Users/Faculty/faculty_profile_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 
 class FacultyListPage extends StatefulWidget {
   const FacultyListPage({super.key});
@@ -16,7 +17,7 @@ class _FacultyListPageState extends State<FacultyListPage> {
 
   @override
   void initState() {
-    getFacultyList().then(
+    GlobalController.getRequest('user/get/allFaculty').then(
       (faculties) {
         setState(() {
           facultyList = faculties['faculties'];
@@ -38,7 +39,6 @@ class _FacultyListPageState extends State<FacultyListPage> {
           final faculty = facultyList[index];
           return InkWell(
             onTap: () {
-              faculty['collegeId'] = faculty['User']['collegeId'];
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => FacultyProfilePage(

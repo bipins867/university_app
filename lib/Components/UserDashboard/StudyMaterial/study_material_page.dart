@@ -13,7 +13,7 @@ class _StudyMaterialPageState extends State<StudyMaterialPage> {
   List courses = [];
   @override
   void initState() {
-    GlobalController.postRequest('studyMaterials/get/Course', {}).then((data) {
+    GlobalController.postRequest('studyMaterials/get/courses', {}).then((data) {
       setState(() {
         courses = data['courses'];
       });

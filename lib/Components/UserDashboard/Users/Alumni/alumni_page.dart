@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:university_app/Components/UserDashboard/Users/Alumni/alumni_profile_page.dart';
-import 'package:university_app/Components/UserDashboard/Users/controller_user.dart';
+import 'package:university_app/Components/global_controller.dart';
+
 import 'package:university_app/Components/global_ui_helper.dart';
+import 'package:university_app/Store/global_state_management.dart';
 
 class AlumniDashboard extends StatefulWidget {
   const AlumniDashboard({super.key});
@@ -14,17 +17,30 @@ class AlumniDashboard extends StatefulWidget {
 class _AlumniDashboardState extends State<AlumniDashboard> {
   Map userInfo = {"name": ""};
 
+  SharedPreferences? _sharedPreferences;
+
   @override
   void initState() {
-    getUserProfileInfo().then(
+    SharedPreferences.getInstance().then(
       (value) {
-        setState(() {
-          userInfo = value['userInfo'];
+        _sharedPreferences = value;
+        String? token = _sharedPreferences?.getString('token');
+        if (token == null) {
+          return Provider.of<GlobalStateHandler>(context, listen: false)
+              .setIsLoggedIn(false);
+        }
+        GlobalController.postWithToken('user/get/userInfo', {}, token).then(
+          (value) {
+            setState(() {
+              userInfo = value['userInfo'];
+            });
+          },
+        ).onError((error, stackTrace) {
+          GlobalUi.createErrorAlertBox(context, 'Error', error.toString());
         });
       },
-    ).onError((error, stackTrace) {
-      GlobalUi.createErrorAlertBox(context, 'Error', error.toString());
-    });
+    );
+
     super.initState();
   }
 
@@ -47,20 +63,6 @@ class _AlumniDashboardState extends State<AlumniDashboard> {
                 userInfo: userInfo,
               ),
             ));
-          },
-        ),
-        _buildDashboardItem(
-          context,
-          'Events and News',
-          Icons.event,
-          () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const EventAndNewsPage(
-                  forWhom: 4444,
-                ),
-              ),
-            );
           },
         ),
         _buildDashboardItem(

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/EventAndNotice/Events/event_page.dart';
 import 'package:university_app/Components/EventAndNotice/Notice/notice_page.dart';
-import 'package:university_app/Components/EventAndNotice/controller_event_and_notice.dart';
+import 'package:university_app/Components/global_controller.dart';
 
 class EventAndNewsPage extends StatefulWidget {
-  final int forWhom;
-  const EventAndNewsPage({super.key, required this.forWhom});
+  final String forWhom;
+  final Map requestObj;
+  const EventAndNewsPage(
+      {super.key, required this.forWhom, required this.requestObj});
 
   @override
   State<EventAndNewsPage> createState() => _EventAndNewsPageState();
@@ -20,10 +22,12 @@ class _EventAndNewsPageState extends State<EventAndNewsPage>
 
   @override
   void initState() {
-    getEventAndNotice(widget.forWhom).then((data) {
+    GlobalController.postRequest(
+            'notifications/get/${widget.forWhom}', widget.requestObj)
+        .then((data) {
       setState(() {
         eventList = data['events'];
-        noticeList = data['notice'];
+        noticeList = data['notices'];
       });
     });
     super.initState();

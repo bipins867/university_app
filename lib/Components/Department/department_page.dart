@@ -13,7 +13,7 @@ class _DepartmentListPageState extends State<DepartmentListPage> {
   List departments = [];
   @override
   void initState() {
-    GlobalController.getRequest('department/get/department').then((data) {
+    GlobalController.getRequest('department/get/departments').then((data) {
       setState(() {
         departments = data['departments'];
       });

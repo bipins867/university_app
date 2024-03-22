@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class StudentProfilePage extends StatelessWidget {
@@ -32,8 +34,7 @@ class StudentProfilePage extends StatelessWidget {
             const SizedBox(height: 20.0),
             buildDetailRow('Name', userInfo['name']),
             buildDetailRow('Father\'s Name', userInfo['fathersName']),
-            buildDetailRow('College ID', userInfo['collegeId'].toString()),
-            buildDetailRow('Department', userInfo['department']),
+            buildDetailRow('collegeId', userInfo['collegeId']),
             buildDetailRow('Phone', userInfo['phone']),
             buildDetailRow('Email', userInfo['email']),
             buildDetailRow('Address', userInfo['address']),
@@ -43,7 +44,12 @@ class StudentProfilePage extends StatelessWidget {
     );
   }
 
-  Widget buildDetailRow(String label, String value) {
+  Widget buildDetailRow(String label, dynamic value) {
+    if (value == null) {
+      return const SizedBox(
+        height: 0,
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -64,7 +70,7 @@ class StudentProfilePage extends StatelessWidget {
           Expanded(
             flex: 5,
             child: Text(
-              value,
+              value.toString(),
               style: TextStyle(
                 fontSize: 16.0,
                 color: Colors.grey[600],

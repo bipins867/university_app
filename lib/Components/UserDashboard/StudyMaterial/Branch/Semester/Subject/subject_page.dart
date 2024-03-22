@@ -15,7 +15,7 @@ class _SubjectPageState extends State<SubjectPage> {
   @override
   void initState() {
     GlobalController.postRequest(
-            'studyMaterials/get/Subject', {'semesterId': widget.semesterId})
+            'studyMaterials/get/subjects', {'semesterId': widget.semesterId})
         .then((data) {
       setState(() {
         subjects = data['subjects'];

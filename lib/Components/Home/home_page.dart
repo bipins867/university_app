@@ -18,7 +18,8 @@ class HomePage extends StatelessWidget {
     final bodyWidgests = [
       const BodyPage(),
       const EventAndNewsPage(
-        forWhom: 1111,
+        forWhom: 'global',
+        requestObj: {},
       ),
       const UserLoginPage()
     ];

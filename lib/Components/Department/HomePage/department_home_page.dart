@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/Department/DepartmentFacultyList/department_faculty_list_page.dart';
 import 'package:university_app/Components/Department/DepartmentInfo/department_info_page.dart';
+import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
 
 class DepartmentHomePage extends StatelessWidget {
   final Map departmentInfo;
@@ -69,7 +70,16 @@ class DepartmentHomePage extends StatelessWidget {
                     );
                   }),
                   _buildDashboardItem(
-                      context, 'Event and Notice', Icons.event_note, () {}),
+                      context, 'Event and Notice', Icons.event_note, () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => EventAndNewsPage(
+                          forWhom: 'department',
+                          requestObj: {'departmentId': departmentInfo['id']},
+                        ),
+                      ),
+                    );
+                  }),
                   _buildDashboardItem(context, 'Faculty List', Icons.people,
                       () {
                     Navigator.of(context).push(MaterialPageRoute(

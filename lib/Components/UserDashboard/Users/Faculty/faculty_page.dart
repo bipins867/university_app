@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
 import 'package:university_app/Components/Department/department_page.dart';
 import 'package:university_app/Components/UserDashboard/Users/Faculty/faculty_profile_page.dart';
 
-import 'package:university_app/Components/UserDashboard/Users/controller_user.dart';
+import 'package:university_app/Components/global_controller.dart';
 import 'package:university_app/Components/global_ui_helper.dart';
+import 'package:university_app/Store/global_state_management.dart';
 
 class FacultyDashboard extends StatefulWidget {
   const FacultyDashboard({super.key});
@@ -15,19 +18,29 @@ class FacultyDashboard extends StatefulWidget {
 
 class _FacultyDashboardState extends State<FacultyDashboard> {
   Map userInfo = {"name": ""};
-
+  SharedPreferences? _sharedPreferences;
   @override
   void initState() {
-    getUserProfileInfo().then(
+    super.initState();
+    SharedPreferences.getInstance().then(
       (value) {
-        setState(() {
-          userInfo = value['userInfo'];
+        _sharedPreferences = value;
+        String? token = _sharedPreferences?.getString('token');
+        if (token == null) {
+          return Provider.of<GlobalStateHandler>(context, listen: false)
+              .setIsLoggedIn(false);
+        }
+        GlobalController.postWithToken('user/get/userInfo', {}, token).then(
+          (value) {
+            setState(() {
+              userInfo = value['userInfo'];
+            });
+          },
+        ).onError((error, stackTrace) {
+          GlobalUi.createErrorAlertBox(context, 'Error', error.toString());
         });
       },
-    ).onError((error, stackTrace) {
-      GlobalUi.createErrorAlertBox(context, 'Error', error.toString());
-    });
-    super.initState();
+    );
   }
 
   @override
@@ -59,7 +72,8 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const EventAndNewsPage(
-                  forWhom: 2222,
+                  forWhom: 'faculty',
+                  requestObj: {},
                 ),
               ),
             );

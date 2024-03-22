@@ -31,11 +31,7 @@ class FacultyProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 20.0),
             buildDetailRow('Name', userInfo['name']),
-            userInfo['collegeId'] != null
-                ? buildDetailRow('College ID', userInfo['collegeId'].toString())
-                : const SizedBox(
-                    height: 0,
-                  ),
+            buildDetailRow('collegeId', userInfo['collegeId']),
             buildDetailRow('Qualification', userInfo['qualification']),
             buildDetailRow(
                 'Area of Specialization', userInfo['areaOfSpecialization']),
@@ -49,7 +45,12 @@ class FacultyProfilePage extends StatelessWidget {
     );
   }
 
-  Widget buildDetailRow(String label, String value) {
+  Widget buildDetailRow(String label, dynamic value) {
+    if (value == null) {
+      return const SizedBox(
+        height: 0,
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -70,7 +71,7 @@ class FacultyProfilePage extends StatelessWidget {
           Expanded(
             flex: 5,
             child: Text(
-              value,
+              value.toString(),
               style: TextStyle(
                 fontSize: 16.0,
                 color: Colors.grey[600],

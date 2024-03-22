@@ -15,7 +15,7 @@ class _SemesterPageState extends State<SemesterPage> {
   @override
   void initState() {
     GlobalController.postRequest(
-            'studyMaterials/get/Semester', {'branchId': widget.branchId})
+            'studyMaterials/get/semesters', {'branchId': widget.branchId})
         .then((data) {
       setState(() {
         semesters = data['semesters'];
