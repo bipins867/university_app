@@ -17,7 +17,7 @@ class _FacultyListPageState extends State<FacultyListPage> {
 
   @override
   void initState() {
-    GlobalController.getRequest('user/get/allFaculty').then(
+    GlobalController.getRequest('user/get/allFaculties').then(
       (faculties) {
         setState(() {
           facultyList = faculties['faculties'];

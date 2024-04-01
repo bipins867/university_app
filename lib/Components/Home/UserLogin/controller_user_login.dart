@@ -19,7 +19,8 @@ Future userLogin(collegeId, password, userType) async {
         }));
 
     if (response.statusCode != 200) {
-      throw "Something went Wrong";
+      var error = jsonDecode(response.body);
+      throw error['error'];
     }
 
     final data = jsonDecode(response.body);

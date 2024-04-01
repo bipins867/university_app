@@ -13,10 +13,10 @@ class _ClubSocietyPageState extends State<ClubSocietyPage> {
   List clubAndSocietes = [];
   @override
   void initState() {
-    GlobalController.getRequest('clubAndSociety/get/clubAndSocietes')
+    GlobalController.getRequest('clubAndSociety/get/clubAndSocieties')
         .then((data) {
       setState(() {
-        clubAndSocietes = data['clubAndSocietes'];
+        clubAndSocietes = data['clubAndSocieties'];
       });
       //log(data.toString());
     });

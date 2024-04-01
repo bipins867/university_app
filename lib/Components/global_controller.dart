@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:university_app/Store/global_state_management.dart';
 
 class GlobalController {
   static Future getRequest(String url) async {
@@ -69,5 +73,15 @@ class GlobalController {
     } on Exception catch (e) {
       return e;
     }
+  }
+
+  static logOut(BuildContext context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    sharedPreferences.remove('token');
+    GlobalStateHandler globalStateHandler =
+        Provider.of<GlobalStateHandler>(context, listen: false);
+    globalStateHandler.setIsLoggedIn(false);
+    Navigator.of(context).pop();
   }
 }

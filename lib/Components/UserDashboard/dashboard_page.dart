@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:university_app/Components/UserDashboard/Users/Alumni/alumni_page.dart';
 import 'package:university_app/Components/UserDashboard/Users/Faculty/faculty_page.dart';
 import 'package:university_app/Components/UserDashboard/Users/Student/student_page.dart';
+import 'package:university_app/Components/global_controller.dart';
 import 'package:university_app/Store/global_state_management.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -21,6 +24,17 @@ class DashboardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(currentObj['title']),
+        actions: [
+          TextButton(
+            onPressed: () {
+              GlobalController.logOut(context);
+            },
+            child: const Text(
+              "LogOut",
+              style: TextStyle(color: Colors.red),
+            ),
+          )
+        ],
       ),
       //drawer: const HomeDrawer(),
       body: currentObj['body'],

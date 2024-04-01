@@ -91,14 +91,6 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
             );
           },
         ),
-        _buildDashboardItem(
-          context,
-          'Student Attendance',
-          Icons.accessibility,
-          () {
-            // Navigate to student attendance screen
-          },
-        ),
       ],
     );
   }
