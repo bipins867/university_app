@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:university_app/Components/global_ui_helper.dart';
 
 class StudentProfilePage extends StatelessWidget {
   final Map userInfo;
@@ -9,6 +10,9 @@ class StudentProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget userImage =
+        GlobalUi.createCircularImage(userInfo['profilePic'], Icons.person, 80);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Profile'),
@@ -18,19 +22,7 @@ class StudentProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: CircleAvatar(
-                radius: 80.0,
-                backgroundColor: Colors.grey[300],
-                // Replace 'imageUrl' with the URL of the user's profile picture
-                // backgroundImage: NetworkImage(user.imageUrl),
-                child: Icon(
-                  Icons.person,
-                  size: 80.0,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
+            Center(child: userImage),
             const SizedBox(height: 20.0),
             buildDetailRow('Name', userInfo['name']),
             buildDetailRow('Father\'s Name', userInfo['fathersName']),

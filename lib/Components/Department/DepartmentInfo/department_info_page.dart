@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:university_app/Components/global_ui_helper.dart';
 
 class DepartmentInfoHomePage extends StatelessWidget {
   final Map departmentInfo;
@@ -6,6 +7,8 @@ class DepartmentInfoHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget backgroundImage =
+        GlobalUi.getImage(departmentInfo['imageUrl'], Icons.school);
     final department = departmentInfo;
     return Scaffold(
       appBar: AppBar(
@@ -52,12 +55,8 @@ class DepartmentInfoHomePage extends StatelessWidget {
                 ],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'assets/Home/ImageSlide/6.jpg',
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  borderRadius: BorderRadius.circular(10),
+                  child: backgroundImage),
             ),
             // About
             Padding(

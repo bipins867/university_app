@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:university_app/Components/Department/HomePage/department_home_page.dart';
 import 'package:university_app/Components/global_controller.dart';
+import 'package:university_app/Store/global_state_management.dart';
 
 class DepartmentListPage extends StatefulWidget {
   const DepartmentListPage({super.key});

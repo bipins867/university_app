@@ -1,14 +1,79 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:university_app/Components/ClubAndSociety/ClubInfo/ClubInfoHomePage/MemberList/meber_list_page.dart';
 import 'package:university_app/Components/ClubAndSociety/ClubInfo/ClubInfoHomePage/club_info_home_page.dart';
 import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
+import 'package:university_app/Components/NotificationForm/NotiifcationForm.dart';
+import 'package:university_app/Components/global_controller.dart';
+import 'package:university_app/Components/global_ui_helper.dart';
+import 'package:university_app/Store/global_state_management.dart';
 
-class ClubInfoPage extends StatelessWidget {
+class ClubInfoPage extends StatefulWidget {
   final Map clubInfo;
   const ClubInfoPage({super.key, required this.clubInfo});
 
   @override
+  State<ClubInfoPage> createState() => _ClubInfoPageState();
+}
+
+class _ClubInfoPageState extends State<ClubInfoPage> {
+  List members = [];
+  Map userInfo = {};
+  Map bodyInfo = {};
+  @override
+  void initState() {
+    GlobalController.postRequest('clubAndSociety/get/members',
+        {"clubAndSocietyId": widget.clubInfo['id']}).then((data) {
+      setState(() {
+        members = data['members'];
+      });
+    }).catchError((err) {
+      log(err);
+    });
+    super.initState();
+  }
+
+  Widget getNotificationWidget(globalStateHandler, bodyInfo, context) {
+    if (globalStateHandler.isLoggedIn) {
+      if (globalStateHandler.userType == 'student') {
+        for (Map member in members) {
+          if (member['UserId'] == userInfo['UserId']) {
+            bodyInfo['createrName'] = userInfo['name'];
+            bodyInfo['createrDesignation'] =
+                member['ClubAndSocietyMember']['designation'];
+            bodyInfo['clubAndSocietyId'] = widget.clubInfo['id'];
+
+            return _buildClubItem(
+              context,
+              'Send Notification',
+              Icons.notification_add,
+              () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => NotificationFormPage(
+                          bodyObj: bodyInfo, path: 'clubAndSociety')),
+                );
+              },
+            );
+          }
+        }
+      }
+    }
+
+    return const SizedBox();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final globalStateHandler = Provider.of<GlobalStateHandler>(context);
+
+    Widget sendNotification =
+        getNotificationWidget(globalStateHandler, bodyInfo, context);
+    userInfo = globalStateHandler.userInfo;
+    Widget backgroundImage =
+        GlobalUi.getImage(widget.clubInfo['profilePic'], Icons.school);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Clubs and Societies'),
@@ -23,24 +88,18 @@ class ClubInfoPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    clubInfo['title'],
+                    widget.clubInfo['title'],
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    clubInfo['subTitle'],
+                    widget.clubInfo['subTitle'],
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/Home/ImageSlide/6.jpg', // Replace with your image asset path
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                      borderRadius: BorderRadius.circular(8),
+                      child: backgroundImage),
                 ],
               ),
             ),
@@ -56,7 +115,7 @@ class ClubInfoPage extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => ClubInfoHomePage(
-                            clubInfo: clubInfo,
+                            clubInfo: widget.clubInfo,
                           ),
                         ),
                       );
@@ -70,7 +129,7 @@ class ClubInfoPage extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => MemberListPage(
-                            clubAndSocietyId: clubInfo['id'],
+                            members: members,
                           ),
                         ),
                       );
@@ -85,12 +144,15 @@ class ClubInfoPage extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => EventAndNewsPage(
                             forWhom: 'clubAndSociety',
-                            requestObj: {'clubAndSocietyId': clubInfo['id']},
+                            requestObj: {
+                              'clubAndSocietyId': widget.clubInfo['id']
+                            },
                           ),
                         ),
                       );
                     },
                   ),
+                  sendNotification
                 ],
               ),
             )

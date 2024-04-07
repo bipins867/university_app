@@ -20,13 +20,6 @@ class _HomeBottomNavigationSystemState
       currentIndex: globalStateHandler.selectHomePage,
       onTap: (value) {
         setState(() {
-          if (value == 2) {
-            if (globalStateHandler.isLoggedIn) {
-              // ignore: void_checks
-              return Provider.of<GlobalStateHandler>(context, listen: false)
-                  .setSelectedHomePage(0);
-            }
-          }
           Provider.of<GlobalStateHandler>(context, listen: false)
               .setSelectedHomePage(value);
         });
@@ -42,13 +35,7 @@ class _HomeBottomNavigationSystemState
             Icons.calendar_today,
           ),
           label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.person,
-          ),
-          label: '',
-        ),
+        )
       ],
     );
   }

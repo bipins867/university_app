@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:university_app/Components/ClubAndSociety/ClubInfo/club_info_page.dart';
 import 'package:university_app/Components/global_controller.dart';
@@ -18,7 +20,6 @@ class _ClubSocietyPageState extends State<ClubSocietyPage> {
       setState(() {
         clubAndSocietes = data['clubAndSocieties'];
       });
-      //log(data.toString());
     });
     super.initState();
   }

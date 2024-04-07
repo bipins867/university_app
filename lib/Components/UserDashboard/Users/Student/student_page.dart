@@ -69,45 +69,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ));
           },
         ),
-        _buildDashboardItem(
-          context,
-          'Event & Notice Section',
-          Icons.event,
-          () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => EventAndNewsPage(
-                  forWhom: 'course',
-                  requestObj: {'courseId': userInfo['CourseId']},
-                ),
-              ),
-            );
-          },
-        ),
-        _buildDashboardItem(
-          context,
-          'Study Materials',
-          Icons.book,
-          () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const StudyMaterialPage(),
-              ),
-            );
-          },
-        ),
-        _buildDashboardItem(
-          context,
-          'Faculty List',
-          Icons.people,
-          () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const FacultyListPage(),
-              ),
-            );
-          },
-        ),
       ],
     );
   }

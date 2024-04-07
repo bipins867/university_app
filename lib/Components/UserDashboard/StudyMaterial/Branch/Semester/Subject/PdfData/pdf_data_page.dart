@@ -44,13 +44,13 @@ class _PdfPageState extends State<PdfPage> with TickerProviderStateMixin {
             tabs: [
               Tab(
                 child: Text(
-                  "Study",
+                  "Question Paper",
                   style: textStyle,
                 ),
               ),
               Tab(
                 child: Text(
-                  "Question Paper",
+                  "Study",
                   style: textStyle,
                 ),
               ),

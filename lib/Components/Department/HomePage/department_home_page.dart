@@ -1,14 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:university_app/Components/Department/DepartmentFacultyList/department_faculty_list_page.dart';
 import 'package:university_app/Components/Department/DepartmentInfo/department_info_page.dart';
 import 'package:university_app/Components/EventAndNotice/user_event_and_notice_page.dart';
+import 'package:university_app/Components/NotificationForm/NotiifcationForm.dart';
+import 'package:university_app/Components/global_ui_helper.dart';
+import 'package:university_app/Store/global_state_management.dart';
 
 class DepartmentHomePage extends StatelessWidget {
   final Map departmentInfo;
   const DepartmentHomePage({super.key, required this.departmentInfo});
 
+  Widget getNotificationWidget(globalStateHandler, bodyInfo, context) {
+    if (globalStateHandler.isLoggedIn) {
+      if (globalStateHandler.userType == 'faculty' &&
+          globalStateHandler.userInfo['id'] == departmentInfo['hodId']) {
+        return _buildDashboardItem(
+            context, 'Send Notification', Icons.notification_add, () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => NotificationFormPage(
+                    bodyObj: bodyInfo,
+                    path: 'department',
+                  )));
+        });
+      }
+    }
+
+    return const SizedBox();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final globalStateHandler = Provider.of<GlobalStateHandler>(context);
+    Map bodyInfo = {
+      "departmentId": departmentInfo['id'],
+      'createrName': globalStateHandler.userInfo['name'],
+      'createrDesignation': globalStateHandler.userInfo['designation']
+    };
+    Widget backgroundImage =
+        GlobalUi.getImage(departmentInfo['imageUrl'], Icons.school);
+    Widget sendNotification =
+        getNotificationWidget(globalStateHandler, bodyInfo, context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Department of ${departmentInfo['title']}"),
@@ -45,14 +77,8 @@ class DepartmentHomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        'assets/Home/ImageSlide/6.jpg', // Replace with your image asset path
-                        width: double.infinity,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                        borderRadius: BorderRadius.circular(8),
+                        child: backgroundImage),
                   ]
                   // Title
                   ),
@@ -87,6 +113,7 @@ class DepartmentHomePage extends StatelessWidget {
                           departmentId: departmentInfo['id']),
                     ));
                   }),
+                  sendNotification
                 ],
               ),
             ),

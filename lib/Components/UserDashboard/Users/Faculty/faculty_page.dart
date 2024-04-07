@@ -66,21 +66,6 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
         ),
         _buildDashboardItem(
           context,
-          'Events and Notifications',
-          Icons.notifications,
-          () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const EventAndNewsPage(
-                  forWhom: 'faculty',
-                  requestObj: {},
-                ),
-              ),
-            );
-          },
-        ),
-        _buildDashboardItem(
-          context,
           'Department',
           Icons.apartment,
           () {

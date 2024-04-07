@@ -1,34 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:university_app/Components/global_controller.dart';
 
-class LeaderList extends StatelessWidget {
+class LeaderList extends StatefulWidget {
   const LeaderList({super.key});
 
-  final List leadersInfo = const [
-    {
-      'id': 1,
-      'image_path': 'assets/Home/LeaderImages/Chancellor-111.png',
-      'title': 'Smt.Anandiben Patel',
-      'subTitle': "Hon'ble Chancellor & H.E. Governor of U.P."
-    },
-    {
-      'id': 2,
-      'image_path': 'assets/Home/LeaderImages/CM-G.png',
-      'title': 'Shri Yogi Adityanath',
-      'subTitle': "Hon'ble Chief Minister of U.P."
-    },
-    {
-      'id': 3,
-      'image_path': 'assets/Home/LeaderImages/ShriAshishPatel.png',
-      'title': 'Shri Ashish Patel',
-      'subTitle': "Hon'ble Minister for Technical Education, U.P."
-    },
-    {
-      'id': 4,
-      'image_path': 'assets/Home/LeaderImages/VC2.png',
-      'title': 'Prof. Jai Prakash Saini',
-      'subTitle': "Hon'ble Vice Chancellor"
-    },
-  ];
+  @override
+  State<LeaderList> createState() => _LeaderListState();
+}
+
+class _LeaderListState extends State<LeaderList> {
+  List leadersInfo = const [];
+  @override
+  void initState() {
+    GlobalController.getRequest('home/get/leaders').then(
+      (info) {
+        setState(() {
+          leadersInfo = info['leaders'];
+        });
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +36,11 @@ class LeaderList extends StatelessWidget {
           child: ListTile(
             leading: CircleAvatar(
               radius: 30,
-              backgroundImage: AssetImage(leader['image_path']),
+              backgroundImage: NetworkImage(leader['profilePic']),
             ),
             title: Center(
               child: Text(
-                leader['title'],
+                leader['name'],
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -59,22 +51,6 @@ class LeaderList extends StatelessWidget {
                   leader['subTitle'],
                   style: const TextStyle(color: Colors.red),
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.orange),
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                    minimumSize: MaterialStateProperty.all(
-                      const Size(100, 20),
-                    ),
-                  ),
-                  child: const Text(
-                    "Message",
-                    style: TextStyle(fontSize: 10),
-                  ),
-                )
               ],
             ),
           ),

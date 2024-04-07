@@ -22,7 +22,9 @@ class _DepartmentFacultyListPageState extends State<DepartmentFacultyListPage> {
         .then((data) {
       setState(() {
         facultyData = data['faculties'];
-        hodId = data['hodId'];
+        if (data['hodId'] != null) {
+          hodId = data['hodId'];
+        }
       });
       //log(data.toString());
     });

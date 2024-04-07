@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../../global_ui_helper.dart';
+
 class ClubInfoHomePage extends StatelessWidget {
   final Map clubInfo;
   const ClubInfoHomePage({super.key, required this.clubInfo});
 
   @override
   Widget build(BuildContext context) {
+    Widget backgroundImage =
+        GlobalUi.getImage(clubInfo['profilePic'], Icons.school);
     final club = clubInfo;
     return Scaffold(
       appBar: AppBar(
@@ -52,12 +56,8 @@ class ClubInfoHomePage extends StatelessWidget {
                 ],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'assets/Home/ImageSlide/6.jpg',
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  borderRadius: BorderRadius.circular(10),
+                  child: backgroundImage),
             ),
             // About
             Padding(

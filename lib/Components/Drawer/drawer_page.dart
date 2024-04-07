@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:university_app/Components/Department/HomePage/department_home_page.dart';
 import 'package:university_app/Components/Department/department_page.dart';
+import 'package:university_app/Components/Home/UserLogin/user_login_page.dart';
 import 'package:university_app/Components/UserDashboard/FacultyList/faculty_list_page.dart';
 import 'package:university_app/Components/UserDashboard/StudyMaterial/study_material_page.dart';
 import 'package:university_app/Components/ClubAndSociety/club_and_society_page.dart';
@@ -39,8 +39,11 @@ class HomeDrawer extends StatelessWidget {
                   ),
                 );
               } else {
-                Provider.of<GlobalStateHandler>(context, listen: false)
-                    .setSelectedHomePage(2);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const UserLoginPage(),
+                  ),
+                );
               }
             },
             child: const Text('Dashboard'),

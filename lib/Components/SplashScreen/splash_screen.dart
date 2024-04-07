@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:university_app/Components/Home/UserLogin/user_login_page.dart';
 import 'package:university_app/Components/Home/home_page.dart';
 
 class HomeSplashScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _HomeSplashScreenState extends State<HomeSplashScreen> {
       const Duration(seconds: 2),
       () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const UserLoginPage(),
         ));
       },
     );
@@ -28,10 +29,13 @@ class _HomeSplashScreenState extends State<HomeSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Text("Splash Screen"),
+          child: Image.asset(
+            'assets/Home/mmm-logo.png',
+            height: 200,
+          ),
         ),
       ),
     );

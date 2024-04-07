@@ -4,26 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:university_app/Components/UserDashboard/Users/Student/student_profile_page.dart';
 import 'package:university_app/Components/global_controller.dart';
 
-class MemberListPage extends StatefulWidget {
-  final int clubAndSocietyId;
-  const MemberListPage({super.key, required this.clubAndSocietyId});
-
-  @override
-  State<MemberListPage> createState() => _MemberListPageState();
-}
-
-class _MemberListPageState extends State<MemberListPage> {
-  List members = [];
-  @override
-  void initState() {
-    GlobalController.postRequest('clubAndSociety/get/members',
-        {"clubAndSocietyId": widget.clubAndSocietyId}).then((data) {
-      setState(() {
-        members = data['members'];
-      });
-    });
-    super.initState();
-  }
+class MemberListPage extends StatelessWidget {
+  final List members;
+  const MemberListPage({super.key, required this.members});
 
   @override
   Widget build(BuildContext context) {
